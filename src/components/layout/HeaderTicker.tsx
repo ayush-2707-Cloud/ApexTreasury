@@ -9,9 +9,23 @@ interface HeaderTickerProps {
   onRefresh: () => Promise<void>;
   isRefreshing: boolean;
   onBackToLanding?: () => void;
+  userProfile?: {
+    full_name: string;
+    email: string;
+    company_name: string;
+    tier: string;
+  } | null;
+  onSignOut?: () => void;
 }
 
-export function HeaderTicker({ fxMeta, onRefresh, isRefreshing, onBackToLanding }: HeaderTickerProps) {
+export function HeaderTicker({
+  fxMeta,
+  onRefresh,
+  isRefreshing,
+  onBackToLanding,
+  userProfile,
+  onSignOut,
+}: HeaderTickerProps) {
   const [justRefreshed, setJustRefreshed] = useState(false);
 
   const handleRefreshClick = async () => {
@@ -111,9 +125,24 @@ export function HeaderTicker({ fxMeta, onRefresh, isRefreshing, onBackToLanding 
           {onBackToLanding && (
             <button
               onClick={onBackToLanding}
-              className="px-2.5 py-1 rounded bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0F172A] font-semibold text-[11px] border border-[#E2E8F0] transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-50 transition-colors cursor-pointer"
             >
-              Public Hero
+              <span>←</span> Exit to Landing
+            </button>
+          )}
+
+          {userProfile && (
+            <span className="text-xs font-mono text-slate-600 bg-slate-100 border border-slate-200/80 px-3 py-1 rounded-full hidden sm:inline">
+              {userProfile.full_name || 'Ayush Singh Chauhan'}
+            </span>
+          )}
+
+          {onSignOut && (
+            <button
+              onClick={onSignOut}
+              className="text-xs font-semibold text-slate-500 hover:text-rose-600 px-2.5 py-1.5 transition-colors cursor-pointer"
+            >
+              Sign Out
             </button>
           )}
         </div>

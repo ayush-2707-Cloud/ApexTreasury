@@ -12,12 +12,14 @@ import { supabase } from '../lib/supabase';
 import { useTreasuryRealtime } from '../hooks/useTreasuryRealtime';
 
 interface LandingHeroProps {
+  onNavigate?: (route: string) => void;
   onLaunchConsole?: () => void;
   onResetToLanding?: () => void;
   fxRate?: number;
 }
 
 export default function LandingHero({
+  onNavigate,
   onLaunchConsole = () => { },
   onResetToLanding,
   fxRate = 94.9062,
@@ -51,10 +53,38 @@ export default function LandingHero({
   };
 
   const handleLogoClick = () => {
-    if (onResetToLanding) {
+    if (onNavigate) {
+      onNavigate('/');
+    } else if (onResetToLanding) {
       onResetToLanding();
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleLaunchConsole = () => {
+    if (onNavigate) {
+      onNavigate('/console');
+    } else {
+      onLaunchConsole();
+    }
+  };
+
+  const handleSignInClick = () => {
+    if (onNavigate) {
+      onNavigate('/login');
+    } else {
+      setAuthModalMode('signin');
+      setAuthModalOpen(true);
+    }
+  };
+
+  const handleSignUpClick = () => {
+    if (onNavigate) {
+      onNavigate('/signup');
+    } else {
+      setAuthModalMode('signup');
+      setAuthModalOpen(true);
     }
   };
 
@@ -127,7 +157,7 @@ export default function LandingHero({
                 </span>
                 <button
                   onClick={handleSignOut}
-                  className="text-xs font-semibold text-slate-600 hover:text-slate-950 px-2 py-1 transition-colors"
+                  className="text-xs font-semibold text-slate-600 hover:text-slate-950 px-2 py-1 transition-colors cursor-pointer"
                 >
                   Sign Out
                 </button>
@@ -135,29 +165,23 @@ export default function LandingHero({
             ) : (
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
-                  onClick={() => {
-                    setAuthModalMode('signin');
-                    setAuthModalOpen(true);
-                  }}
-                  className="text-xs font-semibold text-slate-700 hover:text-slate-950 px-3 py-1.5 rounded-full hover:bg-slate-100 transition-colors"
+                  onClick={handleSignInClick}
+                  className="text-xs font-semibold text-slate-700 hover:text-slate-950 px-3 py-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
                 >
-                  Sign In
+                  Login
                 </button>
                 <button
-                  onClick={() => {
-                    setAuthModalMode('signup');
-                    setAuthModalOpen(true);
-                  }}
-                  className="bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-sm transition-all active:scale-[0.98]"
+                  onClick={handleSignUpClick}
+                  className="bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-sm transition-all active:scale-[0.98] cursor-pointer"
                 >
-                  Open Account
+                  Sign Up
                 </button>
               </div>
             )}
 
             <button
-              onClick={onLaunchConsole}
-              className="px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-sans font-semibold flex items-center gap-1.5 shadow-xs transition-all active:scale-[0.98]"
+              onClick={handleLaunchConsole}
+              className="px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-sans font-semibold flex items-center gap-1.5 shadow-xs transition-all active:scale-[0.98] cursor-pointer"
             >
               <span>Launch Console</span>
               <ArrowRight size={12} weight="bold" />
@@ -207,8 +231,8 @@ export default function LandingHero({
           className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mt-2 mb-8 pointer-events-auto"
         >
           <button
-            onClick={onLaunchConsole}
-            className="w-full sm:w-auto bg-slate-950 hover:bg-slate-800 text-white font-medium px-8 py-3.5 rounded-full shadow-sm transition-all pointer-events-auto flex items-center justify-center gap-2 active:scale-[0.98]"
+            onClick={handleLaunchConsole}
+            className="w-full sm:w-auto bg-slate-950 hover:bg-slate-800 text-white font-medium px-8 py-3.5 rounded-full shadow-sm transition-all pointer-events-auto flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
           >
             <span>Launch Console</span>
             <ArrowRight size={15} weight="bold" />
